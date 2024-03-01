@@ -26,15 +26,25 @@ var isEvenOddTree = function (root) {
         getArrs(node.right, lvl2);
     }
     getArrs(root, 0);
-    // console.log(obj)
+    // console.log(obj);
     for (let key in obj) {
         if (Number(key) % 2 === 0) {
+            if (obj[key].length === 1) {
+                if (obj[key][0] % 2 === 0) {
+                    return false;
+                }
+            }
             for (let i = 0; i < obj[key].length - 1; i++) {
                 if (obj[key][i] % 2 === 0 || obj[key][i + 1] % 2 === 0 || obj[key][i] >= obj[key][i + 1]) {
                     return false;
                 }
             }
         } else {
+            if (obj[key].length === 1) {
+                if (obj[key][0] % 2 !== 0) {
+                    return false;
+                }
+            }
             for (let i = 0; i < obj[key].length - 1; i++) {
                 // console.log(obj[key][i], obj[key][i + 1])
                 if (obj[key][i] % 2 !== 0 || obj[key][i + 1] % 2 !== 0 || obj[key][i] <= obj[key][i + 1]) {
