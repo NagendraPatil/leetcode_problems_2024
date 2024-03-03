@@ -4,16 +4,15 @@
  */
 var longestPalindrome = function (words) {
     let doubles = {};
-    let singles = 0;
+    let singles = {};
     for (let i = 0; i < words.length; i++) {
-        if (words[i] && words[i][0] !== words[i][1]) {
-            let idx = words.findIndex((ele) => ele === words[i][1] + words[i][0]);
-            if (idx > -1) {
-                words[i] = null;
-                words[idx] = null;
-                singles += 2;
+        if (words[i][0] !== words[i][1]) {
+            if (singles[words[i]] === undefined) {
+                singles[words[i]] = 1;
+            } else {
+                singles[words[i]]++;
             }
-        } else if (words[i]) {
+        } else {
             if (doubles[words[i]] === undefined) {
                 doubles[words[i]] = 1;
             } else {
@@ -22,6 +21,14 @@ var longestPalindrome = function (words) {
         }
     }
     let greater = 0;
+    for (let key in singles) {
+        let key2 = key[1] + key[0];
+        if (singles[key] && singles[key2]) {
+            greater += Math.min(singles[key], singles[key2]) * 2;
+            singles[key] = 0;
+            singles[key2] = 0;
+        }
+    }
     if (Object.keys(doubles).length) {
         let rep = Math.max(...Object.values(doubles));
         greater += rep;
@@ -32,15 +39,23 @@ var longestPalindrome = function (words) {
                 break;
             }
         }
+        let isFilled = false;
         for (let key in doubles) {
-            if (doubles[key] % 2 === 0) {
-                greater += doubles[key];
-            } else if (ref !== key) {
-                greater += doubles[key] - 1;
+            if (ref !== key) {
+                if (doubles[key] % 2 === 0) {
+                    greater += doubles[key];
+                } else {
+                    if (rep % 2 === 0 && !isFilled) {
+                        greater += doubles[key];
+                        isFilled = true;
+                    } else {
+                        greater += doubles[key] - 1;
+                    }
+                }
             }
         }
     }
-    return (greater + singles) * 2;
+    return (greater) * 2;
 };
 
 // Problem 2131
