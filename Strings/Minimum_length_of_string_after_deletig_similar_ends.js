@@ -6,7 +6,10 @@ var minimumLength = function (s) {
     s = s.split('');
     let l = 0; r = s.length - 1;
     while (l < r) {
-        if (s[l] === s[l + 1] && s[l] === s[r]) {
+        if (s[l] === s[r] && l === r - 1) {
+            return 0;
+        }
+        else if (s[l] === s[l + 1] && s[l] === s[r]) {
             s[l] = '-';
             l++;
         }
